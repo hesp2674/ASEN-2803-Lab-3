@@ -31,12 +31,29 @@ bigZeta = zeta(Kpt, Kg, Km, J, Rm, Kdt);
 num = [bigW_squared];
 denom = [1 2*bigZeta*sqrt(bigW_squared) bigW_squared];
 cltf = tf(num, denom);
-[x, t] = step(cltf);
+
+% creating input function
+t = 0:0.01:20; % Time from 0 to 20 seconds with a step size of 0.01
+
+% Create a vector of zeros
+frequency = 0.1; % Frequency of the square wave (in Hz)
+amplitude = 0.5; % Amplitude of the square wave
+
+% Define time span
+t = 0:0.01:20; % Time from 0 to 20 seconds with a step size of 0.01
+
+% Generate square wave
+input = amplitude * square(2 * pi * frequency * t);
+
+[x, t] = lsim(cltf, input, t);
 
 
 %% plot you fuck
 figure; hold on;
 plot(t, x, 'LineWidth',1.2)
+plot(t, input, LineWidth=1.5)
+% yline(1.1, 'k--')
+% yline(0.9, 'k--')
 xlabel('time [s]')
 ylabel('theta [rad]')
 title('Kp = 10, Kd = 0')
